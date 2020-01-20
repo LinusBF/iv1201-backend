@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -14,6 +14,14 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
     "mocha": "^7.0.0"
+  },
+  "mocha": {
+    "spec": "test/**/*.test.js",
+    "recursive": true,
+    "exclude": "**/*.local.test.js",
+    "require": "dotenv/config",
+    "timeout": "20000"
   }
 }
