@@ -15,6 +15,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
+    "husky": "^4.0.10",
     "mocha": "^7.0.0"
   },
   "mocha": {
@@ -23,5 +24,11 @@
     "exclude": "**/*.local.test.js",
     "require": "dotenv/config",
     "timeout": "20000"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
   }
+
 }
