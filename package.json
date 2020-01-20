@@ -4,6 +4,7 @@
   "description": "A demo of a global application setup",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha"
   },
   "repository": {
