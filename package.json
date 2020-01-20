@@ -28,7 +28,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm test",
-      "post-merge": "npm install"
+      "post-merge": "yarn install"
     }
   }
 }
