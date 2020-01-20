@@ -28,7 +28,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm test",
-      "post-pull": "npm install"
+      "post-merge": "npm install"
     }
   }
 }
