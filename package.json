@@ -11,5 +11,9 @@
     "url": "https://source.developers.google.com/p/global-application-example/r/backend"
   },
   "author": "Linus Bein Fahlander, Melker Mossberg, Erik Lenas",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.0"
+  }
 }
