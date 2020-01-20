@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "A demo of a global application setup",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
