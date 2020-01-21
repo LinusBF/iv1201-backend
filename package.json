@@ -28,7 +28,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn test",
+      "pre-commit": "lint-staged && snyk test --dev && yarn test",
       "post-merge": "yarn install"
     }
   },
@@ -48,6 +48,7 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prettier": "^3.1.2",
     "lint-staged": "^10.0.1",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "snyk": "^1.279.0"
   }
 }
