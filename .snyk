@@ -1,0 +1,12 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-DOTPROP-543489:
+    - '@google-cloud/nodejs-repo-tools > ava > dot-prop':
+        reason: no upgrade path
+        expires: '2020-03-13T17:26:11.407Z'
+    - '@google-cloud/nodejs-repo-tools > ava > update-notifier > configstore > dot-prop':
+        reason: no upgrade path
+        expires: '2020-03-13T17:26:11.407Z'
+patch: {}
