@@ -41,9 +41,14 @@ const applicationSchema = new Schema({
 
 const validateApplicationModel = applicationPayload => {
   return new Promise((resolve, reject) => {
+    if (typeof applicationPayload === 'undefined') reject(new Error('data is undefined!'));
     const errors = applicationSchema.validate(applicationPayload);
     if (errors.length < 1) resolve(true);
-    else reject(new Error(errors.map(err => ({path: err.path, error: err.message}))));
+    else {
+      const error = new Error('Bad format!');
+      error.pathErrors = errors.map(err => ({path: err.path, error: err.message}));
+      reject(error);
+    }
   });
 };
 

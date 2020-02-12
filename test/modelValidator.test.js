@@ -26,11 +26,27 @@ describe('Model Validator - Application model validation', function() {
 
   it('should return a failure object with all fields failing for the incorrect application', function() {
     const errorPromise = validateApplicationModel(incorrect);
-    expect(errorPromise).to.be.rejected;
-    errorPromise.then(error => {
-      expect(
-        Object.keys(incorrect).every(key => error.map(res => res.path.split('.')[0]).includes(key))
-      ).to.be.true;
-    });
+    const checks = [
+      expect(errorPromise).to.be.rejected,
+      errorPromise.catch(error => {
+        expect(
+          Object.keys(incorrect).every(key =>
+            error.pathErrors.map(res => res.path.split('.')[0]).includes(key)
+          )
+        ).to.be.true;
+      }),
+    ];
+    return Promise.all(checks);
+  });
+
+  it('should reject if undefined object is sent', function() {
+    const errorPromise = validateApplicationModel();
+    const checks = [
+      expect(errorPromise).to.be.rejected,
+      errorPromise.catch(error => {
+        expect(error.message).to.be.eq('data is undefined!');
+      }),
+    ];
+    return Promise.all(checks);
   });
 });
