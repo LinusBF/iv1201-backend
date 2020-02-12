@@ -1,0 +1,12 @@
+{
+  "userId": 1231432342,
+  "firstName": 15,
+  "lastName": "",
+  "ssn": "123456790123123",
+  "expertise": [1, 2, true],
+  "available": [
+    [1239849333, "2020-02-01"],
+    ["HI", "THERE"]
+  ],
+  "letter": 42
+}

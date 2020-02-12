@@ -2,11 +2,11 @@
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const expect = chai.expect;
 const utils = require('@google-cloud/nodejs-repo-tools');
 const proxyquire = require('proxyquire');
 
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 const objectToSaveToDatabase = {test: 'test'};
 const listOfObjectsInDB = [];

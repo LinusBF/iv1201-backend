@@ -1,0 +1,13 @@
+{
+  "userId": "123124134134134",
+  "firstName": "First",
+  "lastName": "Last",
+  "ssn": "1234567890",
+  "email": "test@test.com",
+  "expertise": ["Expertise1", "Expertise2", "Expertise3"],
+  "available": [
+    ["2020-01-01", "2020-02-01"],
+    ["2020-03-01", "2020-04-01"]
+  ],
+  "letter": "This is a long text about a possible applicant"
+}

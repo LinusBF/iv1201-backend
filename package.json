@@ -57,6 +57,7 @@
   "dependencies": {
     "@google-cloud/datastore": "^5.0.4",
     "express": "^4.17.1",
-    "snyk": "^1.279.0"
+    "snyk": "^1.279.0",
+    "validate": "^5.1.0"
   }
 }
