@@ -17,7 +17,7 @@ steps:
     id: "Upload docker image to gcr.io"
     args: ["builds", "submit", "--config=docker_build.yaml",
            "--project" ,"global-application-example",
-           "--substitutions", "_IMAGE_URL=\"gcr.io/global-application-example/global-apps-backend\",_DEPLOY_ENV=\"production\""]
+           "--substitutions", "_IMAGE_URL=gcr.io/global-application-example/global-apps-backend,_DEPLOY_ENV=production"]
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Deploy Cloud Run Service"
