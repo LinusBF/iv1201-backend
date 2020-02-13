@@ -1,7 +1,7 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
     id: "Creating docker image"
-    args: ["build", "-t", "${_IMAGE_URL}", "."]
+    args: ["build", "--build-arg", "DEPLOY_ENV=${_DEPLOY_ENV}", "-t", "${_IMAGE_URL}", "."]
     env:
       - NODE_ENV=$_DEPLOY_ENV
 
