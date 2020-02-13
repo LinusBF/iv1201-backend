@@ -1,0 +1,24 @@
+steps:
+  - name: "node:10.15.1"
+    id: "Yarn Install"
+    args: ["yarn", "install"]
+    env:
+      - NODE_ENV=development
+
+  - name: "node:10.15.1"
+    id: "Running unit tests"
+    args: ["yarn", "test"]
+    env:
+      - NODE_ENV=development
+      - JOB_APPLICATION_KIND=testKind
+      - USER_FIELD_NAME=userId
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "Upload docker image to gcr.io"
+    args: ["builds", "submit" ,"--project" ,"global-application-example" ,"--tag" ,"gcr.io/global-application-example/global-apps-dev-backend"]
+    env:
+      - BUILD_ENV=-dev
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "Deploy Cloud Run Service"
+    args: ["run", "deploy", "global-apps-dev-backend", "--project", "global-application-example", "--region", "europe-west1", "--allow-unauthenticated", "--image", "gcr.io/global-application-example/global-apps-dev-backend", "--platform", "managed"]
