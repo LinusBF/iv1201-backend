@@ -2,7 +2,8 @@
 
 const express = require('express');
 const app = express();
-//const attachJobApplicationEndpoints = require('./src/jobApplication/moduleRouter');
+const attachJobApplicationEndpoints = require('./src/jobApplication/moduleRouter');
+const attachUserEndpoints = require('./src/user/moduleRouter');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -17,7 +18,8 @@ router.get('/', (req, res) => {
   });
 });
 
-//attachJobApplicationEndpoints(router);
+attachJobApplicationEndpoints(router);
+attachUserEndpoints(router);
 app.use('/', router);
 
 const port = process.env.PORT || 8080;
