@@ -1,10 +1,18 @@
 'use strict';
 const Schema = require('validate');
+const dateRegex = /(19|20)[0-9][0-9]-([0][0-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])/;
+const dateErrMsg = 'Must be a valid date!';
 
 const applicationSchema = new Schema({
   userId: {
     type: String,
     required: true,
+  },
+  applyDate: {
+    type: String,
+    required: true,
+    match: dateRegex,
+    message: dateErrMsg,
   },
   firstName: {
     type: String,
@@ -30,7 +38,7 @@ const applicationSchema = new Schema({
   available: [
     {
       type: Array,
-      each: {type: String},
+      each: {type: String, match: dateRegex, message: dateErrMsg},
     },
   ],
   letter: {
@@ -52,6 +60,11 @@ const validateApplicationModel = applicationPayload => {
   });
 };
 
+const validateUserId = userId => {
+  return typeof userId === 'string' && userId.length > 0;
+};
+
 module.exports = {
   validateApplicationModel,
+  validateUserId,
 };

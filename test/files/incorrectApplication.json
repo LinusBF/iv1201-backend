@@ -1,7 +1,8 @@
 {
   "userId": 1231432342,
+  "applyDate": "2020-05-32",
   "firstName": 15,
-  "lastName": "",
+  "laName": "",
   "ssn": "123456790123123",
   "expertise": [1, 2, true],
   "available": [
