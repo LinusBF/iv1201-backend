@@ -13,10 +13,7 @@ router.get('/', (req, res) => {
   console.log('Received a request at root?');
   res.status(200).send({
     data: 'Please make a request to a valid endpoint',
-    envChecker:
-      process.env.NODE_ENV === 'development'
-        ? process.env.JOB_APPLICATION_KIND
-        : process.env.JOB_APPLICATION_KIND_DEV,
+    envChecker: `${process.env.NODE_ENV}`,
   });
 });
 
