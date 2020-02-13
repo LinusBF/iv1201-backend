@@ -20,7 +20,7 @@ COPY . ./
 
 # Set environment variables
 ARG DOCKER_ENV
-ARG NODE_ENV
+ENV NODE_ENV=${_DEPLOY_ENV}
 ENV JOB_APPLICATION_KIND="Application"
 ENV JOB_APPLICATION_KIND_DEV="ApplicationDev"
 ENV USER_FIELD_NAME="userId"

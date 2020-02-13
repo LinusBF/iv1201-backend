@@ -15,9 +15,10 @@ steps:
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Upload docker image to gcr.io"
-    args: ["builds", "submit" ,"--project" ,"global-application-example" ,"--tag" ,"gcr.io/global-application-example/global-apps-dev-backend"]
-    env:
-      - NODE_ENV=development
+    args: ["builds", "submit",
+           "--project" ,"global-application-example",
+           "--tag" ,"gcr.io/global-application-example/global-apps-dev-backend",
+           "--substitutions", "_DEPLOY_ENV=development"]
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Deploy Cloud Run Service"
