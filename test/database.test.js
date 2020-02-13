@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 const objectToSaveToDatabase = {test: 'test'};
 const listOfObjectsInDB = [];
 for (let i = 0; i < 50; i++) {
-  listOfObjectsInDB[i] = {test: `test${i}`, kind: i < 25 ? 'testKind' : 'testKind2'};
+  listOfObjectsInDB[i] = {test: `test${i}`, num: i % 5, kind: i < 25 ? 'testKind' : 'testKind2'};
 }
 
 let keyOverRide = () => {};
@@ -35,7 +35,7 @@ class Storage {
   }
 }
 
-const {putEntityInDB, getAllOfKind} = proxyquire('../src/database.js', {
+const {putEntityInDB, getAllOfKind, getDocumentsByField} = proxyquire('../src/database.js', {
   '@google-cloud/datastore': {Datastore: Storage},
 });
 
@@ -52,6 +52,12 @@ describe('Database Add Entity Test', function() {
       return new Promise(res => res([entity]));
     };
   });
+
+  after(function() {
+    keyOverRide = () => {};
+    saveOverRide = () => {};
+  });
+
   it('Should save the test object to the database with a generated key if none is provided', function() {
     return putEntityInDB(objectToSaveToDatabase, 'testKind')
       .then(result => {
@@ -114,6 +120,11 @@ describe('Database List All Test', function() {
     };
   });
 
+  after(function() {
+    queryOverRide = () => {};
+    resultOverRide = () => {};
+  });
+
   it('Return all objects of kind in DB', function() {
     const kindToTest = 'testKind2';
     return getAllOfKind(kindToTest, 20, 0)
@@ -143,8 +154,79 @@ describe('Database List All Test', function() {
 
   it('Should reject if any argument is not provided', function() {
     return expect(getAllOfKind())
-      .to.be.rejected.then(expect(getAllOfKind('TestKind')).to.be.rejected)
+      .to.be.rejected.then(expect(getAllOfKind('testKind')).to.be.rejected)
       .then(expect(getAllOfKind(undefined, 20)).to.be.rejected)
       .then(expect(getAllOfKind(undefined, undefined, 2)).to.be.rejected);
+  });
+});
+
+describe('Database Get By Field Test', function() {
+  let queriedKind, queriedField, queriedNeedle;
+
+  before(function() {
+    queryOverRide = function(kind) {
+      queriedKind = kind;
+      return {
+        filter: (f, s, n) => {
+          queriedField = f;
+          queriedNeedle = n;
+          return {queryOfKind: kind};
+        },
+      };
+    };
+    resultOverRide = function(query) {
+      expect(queriedKind).to.be.eql(query.queryOfKind);
+      return new Promise(res =>
+        res([
+          listOfObjectsInDB
+            .filter(testObj => testObj.kind === queriedKind)
+            .filter(testObj => testObj[queriedField] === queriedNeedle),
+        ])
+      );
+    };
+  });
+
+  after(function() {
+    queryOverRide = () => {};
+    resultOverRide = () => {};
+  });
+
+  it('Return all objects of that fulfill the field value', function() {
+    const kindToTest = 'testKind2';
+    const fieldToTest = 'num';
+    const needleToTest = 3;
+    return getDocumentsByField(kindToTest, 'num', 3)
+      .then(result => {
+        expect(Array.isArray(result)).to.be.true;
+        expect(
+          result.every(o => {
+            return o.kind === kindToTest && o[fieldToTest] === needleToTest;
+          })
+        ).to.be.true;
+      })
+      .catch(err => {
+        expect.fail(err);
+      });
+  });
+
+  it('Should return an empty array if no items exists of that kind', function() {
+    const kindToTest = 'testKind2';
+    const fieldToTest = 'doesntExist';
+    const needleToTest = 3;
+    return getDocumentsByField(kindToTest, fieldToTest, needleToTest)
+      .then(result => {
+        expect(Array.isArray(result)).to.be.true;
+        expect(result.length).to.be.eql(0);
+      })
+      .catch(err => {
+        expect.fail(err);
+      });
+  });
+
+  it('Should reject if any argument is not provided', function() {
+    return expect(getDocumentsByField())
+      .to.be.rejected.then(expect(getDocumentsByField('testKind')).to.be.rejected)
+      .then(expect(getDocumentsByField(undefined, 'testField')).to.be.rejected)
+      .then(expect(getDocumentsByField(undefined, undefined, 2)).to.be.rejected);
   });
 });
