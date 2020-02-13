@@ -10,6 +10,8 @@ steps:
     args: ["yarn", "test"]
     env:
       - NODE_ENV=development
+      - JOB_APPLICATION_KIND=testKind
+      - USER_FIELD_NAME=userId
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Upload docker image to gcr.io"

@@ -18,5 +18,8 @@ RUN yarn install --only=production
 # Copy local code to the container image.
 COPY . ./
 
+# Set environment variables
+ENV JOB_APPLICATION_KIND="Application", USER_FIELD_NAME="userId"
+
 # Run the web service on container startup.
 CMD [ "yarn", "start" ]
