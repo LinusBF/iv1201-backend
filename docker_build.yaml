@@ -1,0 +1,10 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Creating docker image"
+    args: ["build", "-t", "gcr.io/global-application-example/${_IMAGE_URL}", "."]
+    env:
+      - NODE_ENV=$_DEPLOY_ENV
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Upload docker image to gcr.io"
+    args: ["push", "gcr.io/global-application-example/${_IMAGE_URL}"]
