@@ -19,9 +19,14 @@ RUN yarn install --only=production
 COPY . ./
 
 # Set environment variables
+ARG DOCKER_ENV
+ARG NODE_ENV
 ENV JOB_APPLICATION_KIND="Application"
 ENV JOB_APPLICATION_KIND_DEV="ApplicationDev"
 ENV USER_FIELD_NAME="userId"
+
+RUN echo $DOCKER_ENV
+RUN echo $NODE_ENV
 
 # Run the web service on container startup.
 CMD [ "yarn", "start" ]
