@@ -65,7 +65,7 @@ describe('Job Application Controller - Submit application', function() {
       return new Promise(res =>
         res([
           {
-            mutationResults: [{key: `GeneratedId`}],
+            mutationResults: [{key: {path: [{id: `GeneratedId`}]}}],
           },
         ])
       );

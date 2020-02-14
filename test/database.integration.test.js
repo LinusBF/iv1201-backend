@@ -11,22 +11,19 @@ afterEach(utils.restoreConsole);
 
 const integrationKind = 'TestKind';
 
-describe('Database Add Entity Integration Test', function() {
+describe.only('Database Add Entity Integration Test', function() {
   it('should correctly save an entity to the database', function() {
     const objectToSave = {
       testString: 'test',
       testInt: 1337,
       testArray: [1, 'test'],
-      testNestedArray: [
-        [1, 2],
-        ['one', 'two'],
-      ],
+      testArrayOfObjects: [{from: '2020-05-20'}, {to: '2020-05-29'}],
     };
 
     return database
       .putEntityInDB(objectToSave, integrationKind)
       .then(dbResult => {
-        return expect(dbResult.id).to.not.be.undefined;
+        return expect(typeof dbResult.path[0].id).to.be.eq('string');
       })
       .catch(err => {
         return expect.fail(`Failed to create with error: ${err}`);
@@ -34,7 +31,7 @@ describe('Database Add Entity Integration Test', function() {
   });
 });
 
-describe.only('Database Fetch Entity Integration Test', function() {
+describe('Database Fetch Entity Integration Test', function() {
   it('should correctly save an entity to the database', function() {
     return database
       .getDocumentsByField(integrationKind, 'testInt', 1337)

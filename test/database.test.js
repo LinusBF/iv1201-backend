@@ -48,10 +48,7 @@ describe('Database Add Entity Test', function() {
       testString: 'test',
       testInt: 1337,
       testArray: [1, 'test'],
-      testNestedArray: [
-        [1, 2],
-        ['one', 'two'],
-      ],
+      testNestedObject: [{from: '2020-05-20'}, {to: '2020-05-29'}],
     };
   });
 

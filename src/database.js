@@ -5,42 +5,7 @@ const {Datastore} = require('@google-cloud/datastore');
 // Creates a client
 const datastore = new Datastore();
 
-const NESTED_ARRAY_KEY = 'array: ';
-
-/**
- * @param obj Object
- */
-const transformObjectToDatastore = obj => {
-  const transformValue = (val, prop) => {
-    if (Array.isArray(val)) {
-      return {
-        name: prop,
-        value: val.map(v => (Array.isArray(v) ? NESTED_ARRAY_KEY + JSON.stringify(v) : v)),
-        exclude_from_indexes: true,
-      };
-    } else {
-      return {
-        name: prop,
-        value: val,
-      };
-    }
-  };
-  const entityToSave = [];
-  Object.keys(obj).forEach(prop => entityToSave.push(transformValue(obj[prop], prop)));
-  return entityToSave;
-};
-
 const extractObject = obj => {
-  const restoreNestedArrays = arr => {
-    return arr.map(val => {
-      if (typeof val === 'string' && val.startsWith(NESTED_ARRAY_KEY)) {
-        return JSON.parse(val.substring(NESTED_ARRAY_KEY.length));
-      } else return val;
-    });
-  };
-  Object.keys(obj).forEach(
-    prop => (obj[prop] = Array.isArray(obj[prop]) ? restoreNestedArrays(obj[prop]) : obj[prop])
-  );
   const symbolKey = Reflect.ownKeys(obj).find(key => key.toString() === 'Symbol(KEY)');
   obj.uid = obj[symbolKey].id;
   return obj;
@@ -58,16 +23,9 @@ const putEntityInDB = (thingToSave, kindOfThing, idOfThing) => {
   // The Cloud Datastore key for the entity
   const keyForThing = datastore.key(idOfThing ? [kindOfThing, idOfThing] : kindOfThing);
 
-  let transformForDatastore = {};
-  try {
-    transformForDatastore = transformObjectToDatastore(thingToSave);
-  } catch (e) {
-    return Promise.reject(e);
-  }
-
   const entityToSave = {
     key: keyForThing,
-    data: transformForDatastore,
+    data: thingToSave,
   };
 
   return datastore.save(entityToSave).then(response => response[0].mutationResults[0].key);

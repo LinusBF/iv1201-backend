@@ -37,8 +37,8 @@ const applicationSchema = new Schema({
   },
   available: [
     {
-      type: Array,
-      each: {type: String, match: dateRegex, message: dateErrMsg},
+      from: {type: String, match: dateRegex, message: dateErrMsg},
+      to: {type: String, match: dateRegex, message: dateErrMsg},
     },
   ],
   letter: {

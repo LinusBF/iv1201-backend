@@ -13,7 +13,7 @@ const USER_ID_FIELD = process.env.USER_FIELD_NAME;
  * @return {Promise<never>|Promise<Number>|*}
  */
 const submitApplication = (application, overrideId) => {
-  return putEntityInDB(application, APPLICATION_KIND, overrideId);
+  return putEntityInDB(application, APPLICATION_KIND, overrideId).then(res => res.path[0].id);
 };
 
 /**
