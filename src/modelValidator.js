@@ -4,57 +4,36 @@ const dateRegex = /(19|20)[0-9][0-9]-([0][0-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3
 const dateErrMsg = 'Must be a valid date!';
 
 const applicationSchema = new Schema({
-  userId: {
-    type: String,
-    required: true,
-  },
-  applyDate: {
-    type: String,
-    required: true,
-    match: dateRegex,
-    message: dateErrMsg,
-  },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  ssn: {
-    type: String,
-    required: true,
-    length: {min: 10, max: 12},
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  expertise: {
-    type: Array,
-    each: {type: String},
-  },
+  userId: {type: String, required: true},
+  applyDate: {type: String, required: true, match: dateRegex, message: dateErrMsg},
+  firstName: {type: String, required: true},
+  lastName: {type: String, required: true},
+  ssn: {type: String, required: true, length: {min: 10, max: 12}},
+  email: {type: String, required: true},
+  expertise: {type: Array, each: {type: String}},
   available: [
     {
       from: {type: String, match: dateRegex, message: dateErrMsg},
       to: {type: String, match: dateRegex, message: dateErrMsg},
     },
   ],
-  letter: {
-    type: String,
-    required: true,
-  },
+  letter: {type: String, required: true},
+});
+
+const statusUpdateSchema = new Schema({
+  status: {type: Boolean, required: true},
+  oldStatus: {type: Boolean, required: true},
 });
 
 /**
- * @param applicationPayload Application
+ * @param schemaToTestAgainst Schema
+ * @param thingToTest Object
  * @return {Promise<true>|Promise<Schema.ValidationError>}
  */
-const validateApplicationModel = applicationPayload => {
+const validateSchema = (schemaToTestAgainst, thingToTest) => {
   return new Promise((resolve, reject) => {
-    if (typeof applicationPayload === 'undefined') reject(new Error('data is undefined!'));
-    const errors = applicationSchema.validate(applicationPayload);
+    if (typeof thingToTest === 'undefined') reject(new Error('data is undefined!'));
+    const errors = schemaToTestAgainst.validate(thingToTest);
     if (errors.length < 1) resolve(true);
     else {
       const error = new Error('Bad format!');
@@ -62,6 +41,22 @@ const validateApplicationModel = applicationPayload => {
       reject(error);
     }
   });
+};
+
+/**
+ * @param applicationPayload Application
+ * @return {Promise<true>|Promise<Schema.ValidationError>}
+ */
+const validateApplicationModel = applicationPayload => {
+  return validateSchema(applicationSchema, applicationPayload);
+};
+
+/**
+ * @param statusPayload Object
+ * @return {Promise<true>|Promise<Schema.ValidationError>}
+ */
+const validateStatusUpdate = statusPayload => {
+  return validateSchema(statusUpdateSchema, statusPayload);
 };
 
 /**
@@ -86,6 +81,7 @@ const validateUserId = userId => {
 
 module.exports = {
   validateApplicationModel,
+  validateStatusUpdate,
   validateCountAndOffset,
   validateUserId,
 };

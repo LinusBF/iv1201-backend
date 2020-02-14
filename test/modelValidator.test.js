@@ -5,48 +5,81 @@ const chaiAsPromised = require('chai-as-promised');
 const expect = chai.expect;
 const utils = require('@google-cloud/nodejs-repo-tools');
 const fs = require('fs');
-const {validateApplicationModel} = require('../src/modelValidator');
+const {validateApplicationModel, validateStatusUpdate} = require('../src/modelValidator');
 
 chai.use(chaiAsPromised);
 
 const filesPath = __dirname + '/files/';
-const correctPath = filesPath + 'correctApplication.json';
-const incorrectPath = filesPath + 'incorrectApplication.json';
 
-const correct = JSON.parse(fs.readFileSync(correctPath).toString());
-const incorrect = JSON.parse(fs.readFileSync(incorrectPath).toString());
+/**
+ * @param testPromise Promise
+ * @param expected Object
+ * @return {[Chai.PromisedAssertion, Promise<any>]}
+ */
+const verifyErrorObject = (testPromise, expected) => {
+  return [
+    expect(testPromise).to.be.rejected,
+    testPromise.catch(error => {
+      expect(
+        Object.keys(expected).every(key =>
+          error.pathErrors.map(res => res.path.split('.')[0]).includes(key)
+        )
+      ).to.be.true;
+    }),
+  ];
+};
+
+/**
+ * @param testPromise Promise
+ * @return {[Chai.PromisedAssertion, Promise<any>]}
+ */
+const verifyUndefinedError = testPromise => {
+  return [
+    expect(testPromise).to.be.rejected,
+    testPromise.catch(error => {
+      expect(error.message).to.be.eq('data is undefined!');
+    }),
+  ];
+};
 
 beforeEach(utils.stubConsole);
 afterEach(utils.restoreConsole);
 
 describe('Model Validator - Application model validation', function() {
+  const correctPath = filesPath + 'correctApplication.json';
+  const incorrectPath = filesPath + 'incorrectApplication.json';
+  const correct = JSON.parse(fs.readFileSync(correctPath).toString());
+  const incorrect = JSON.parse(fs.readFileSync(incorrectPath).toString());
+
   it('should return true for a correct application', function() {
     return expect(validateApplicationModel(correct)).to.eventually.equal(true);
   });
 
   it('should return a failure object with all fields failing for the incorrect application', function() {
     const errorPromise = validateApplicationModel(incorrect);
-    const checks = [
-      expect(errorPromise).to.be.rejected,
-      errorPromise.catch(error => {
-        expect(
-          Object.keys(incorrect).every(key =>
-            error.pathErrors.map(res => res.path.split('.')[0]).includes(key)
-          )
-        ).to.be.true;
-      }),
-    ];
-    return Promise.all(checks);
+    return Promise.all(verifyErrorObject(errorPromise, incorrect));
   });
 
   it('should reject if undefined object is sent', function() {
     const errorPromise = validateApplicationModel();
-    const checks = [
-      expect(errorPromise).to.be.rejected,
-      errorPromise.catch(error => {
-        expect(error.message).to.be.eq('data is undefined!');
-      }),
-    ];
-    return Promise.all(checks);
+    return Promise.all(verifyUndefinedError(errorPromise));
+  });
+});
+
+describe('Model Validator - Status update validation', function() {
+  const correct = {status: true, oldStatus: false};
+  const incorrect = {status: 'true', oldStatus: -1};
+  it('should return true for a correct payload', function() {
+    return expect(validateStatusUpdate(correct)).to.eventually.equal(true);
+  });
+
+  it('should return a failure object with all fields failing for the incorrect status update', function() {
+    const errorPromise = validateStatusUpdate(incorrect);
+    return Promise.all(verifyErrorObject(errorPromise, incorrect));
+  });
+
+  it('should reject if undefined object is sent', function() {
+    const errorPromise = validateStatusUpdate();
+    return Promise.all(verifyUndefinedError(errorPromise));
   });
 });
