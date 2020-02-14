@@ -10,10 +10,11 @@ steps:
     args: ["yarn", "test"]
     env:
       - NODE_ENV=development
-      - JOB_APPLICATION_KIND=testKind
-      - JOB_APPLICATION_KIND_DEV=testKind
+      - JOB_APPLICATION_KIND=TestKind
+      - JOB_APPLICATION_KIND_DEV=TestKind
       - USER_FIELD_NAME=userId
       - SORT_FIELD_NAME=applyDate
+      - STATUS_FIELD_NAME=approved
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Upload docker image to gcr.io"

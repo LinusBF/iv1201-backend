@@ -1,11 +1,18 @@
 'use strict';
 
-const {putEntityInDB, getAllOfKind, getDocumentsByField} = require('../database');
+const {
+  putEntityInDB,
+  getAllOfKind,
+  getDocumentsByField,
+  getDocumentsById,
+  setFieldInDocument,
+} = require('../database');
 
 const APPLICATION_KIND =
   process.env[`JOB_APPLICATION_KIND${process.env.NODE_ENV === 'production' ? '' : '_DEV'}`];
 const SORT_FIELD = process.env.SORT_FIELD_NAME;
 const USER_ID_FIELD = process.env.USER_FIELD_NAME;
+const STATUS_FIELD = process.env.STATUS_FIELD_NAME;
 
 /**
  *
@@ -27,6 +34,14 @@ const getApplications = (count, offset) => {
 };
 
 /**
+ * @param id String
+ * @return {Promise<never> | Promise<Application>}
+ */
+const getApplicationById = id => {
+  return getDocumentsById(APPLICATION_KIND, parseInt(id)).then(docs => docs[0]);
+};
+
+/**
  * @param userId String
  * @return {Promise<never> | Promise<Application>}
  */
@@ -36,8 +51,38 @@ const getApplicationByUser = userId => {
   );
 };
 
+/**
+ * @param id String
+ * @param newStatus Boolean
+ * @param oldStatus Boolean
+ * @return {Promise<never>|Promise<Boolean>}
+ */
+const updateStatusOfApplication = (id, newStatus, oldStatus) => {
+  let updatedApplication;
+  return getApplicationById(id)
+    .then(application => {
+      if (
+        typeof application[STATUS_FIELD] === 'undefined' ||
+        application[STATUS_FIELD] === oldStatus
+      ) {
+        updatedApplication = application;
+        updatedApplication[STATUS_FIELD] = newStatus;
+        return setFieldInDocument(APPLICATION_KIND, parseInt(id), STATUS_FIELD, newStatus);
+      } else {
+        const oldValueError = new Error('The status has already been updated!');
+        oldValueError.oldValue = true;
+        return Promise.reject(oldValueError);
+      }
+    })
+    .then(success =>
+      success ? updatedApplication : Promise.reject(new Error(`Transaction failed!`))
+    );
+};
+
 module.exports = {
   submitApplication,
   getApplications,
+  getApplicationById,
   getApplicationByUser,
+  updateStatusOfApplication,
 };

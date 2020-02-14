@@ -6,6 +6,7 @@ const dateErrMsg = 'Must be a valid date!';
 const applicationSchema = new Schema({
   userId: {type: String, required: true},
   applyDate: {type: String, required: true, match: dateRegex, message: dateErrMsg},
+  approved: {type: Boolean, required: true},
   firstName: {type: String, required: true},
   lastName: {type: String, required: true},
   ssn: {type: String, required: true, length: {min: 10, max: 12}},
@@ -52,23 +53,36 @@ const validateApplicationModel = applicationPayload => {
 };
 
 /**
+ * @param applicationId String
  * @param statusPayload Object
- * @return {Promise<true>|Promise<Schema.ValidationError>}
+ * @return {Promise<void>}
  */
-const validateStatusUpdate = statusPayload => {
-  return validateSchema(statusUpdateSchema, statusPayload);
+const validateStatusUpdate = (applicationId, statusPayload) => {
+  return validateSchema(statusUpdateSchema, statusPayload).then(() => {
+    return validateApplicationId(applicationId)
+      ? true
+      : Promise.reject(new Error('Invalid application ID!'));
+  });
 };
 
 /**
- * @param count {Number|undefined}
- * @param offset {Number|undefined}
+ * @param count {String|undefined}
+ * @param offset {String|undefined}
  * @return {boolean}
  */
 const validateCountAndOffset = (count, offset) => {
   return (
-    (typeof count === 'undefined' || (typeof count === 'number' && !Number.isNaN(count))) &&
-    (typeof offset === 'undefined' || (typeof offset === 'number' && !Number.isNaN(offset)))
+    (typeof count === 'undefined' || !Number.isNaN(parseInt(count))) &&
+    (typeof offset === 'undefined' || !Number.isNaN(parseInt(offset)))
   );
+};
+
+/**
+ * @param applicationId {String}
+ * @return {boolean}
+ */
+const validateApplicationId = applicationId => {
+  return typeof applicationId === 'string' && !Number.isNaN(parseInt(applicationId));
 };
 
 /**
@@ -83,5 +97,6 @@ module.exports = {
   validateApplicationModel,
   validateStatusUpdate,
   validateCountAndOffset,
+  validateApplicationId,
   validateUserId,
 };

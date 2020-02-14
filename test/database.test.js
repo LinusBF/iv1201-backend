@@ -15,7 +15,7 @@ for (let i = 0; i < 50; i++) {
     test: `test${i}`,
     order: i,
     num: i % 5,
-    kind: i < 25 ? 'testKind' : 'testKind2',
+    kind: i < 25 ? 'TestKind' : 'TestKind2',
   };
 }
 
@@ -79,7 +79,7 @@ describe('Database Add Entity Test', function() {
   });
 
   it('Should save the test object to the database with a generated key if none is provided', function() {
-    return putEntityInDB(objectToSaveToDatabase, 'testKind')
+    return putEntityInDB(objectToSaveToDatabase, 'TestKind')
       .then(result => {
         expect(result).to.be.eq('GeneratedId');
       })
@@ -89,7 +89,7 @@ describe('Database Add Entity Test', function() {
   });
 
   it('Should save the test object with a specific key if one is provided', function() {
-    return putEntityInDB(objectToSaveToDatabase, 'testKind', 'testKey')
+    return putEntityInDB(objectToSaveToDatabase, 'TestKind', 'testKey')
       .then(result => {
         expect(result).to.be.eq('GeneratedId');
       })
@@ -103,7 +103,7 @@ describe('Database Add Entity Test', function() {
   });
 
   it('Should reject if the thing to save is undefined type is provided', function() {
-    return expect(putEntityInDB(undefined, 'testKind')).to.be.rejected;
+    return expect(putEntityInDB(undefined, 'TestKind')).to.be.rejected;
   });
 });
 
@@ -162,7 +162,7 @@ describe('Database List All Test', function() {
   });
 
   it('Return all objects of kind in DB', function() {
-    const kindToTest = 'testKind2';
+    const kindToTest = 'TestKind2';
     return getAllOfKind(kindToTest, sortByTest, 20, 0)
       .then(result => {
         expect(Array.isArray(result)).to.be.true;
@@ -189,7 +189,7 @@ describe('Database List All Test', function() {
   });
 
   it('Should return items in the correct order', function() {
-    const kindToTest = 'testKind2';
+    const kindToTest = 'TestKind2';
     const expectedFirstElement = listOfObjectsInDB[49];
     return getAllOfKind(kindToTest, sortByTest, 25, 0)
       .then(result => {
@@ -202,7 +202,7 @@ describe('Database List All Test', function() {
 
   it('Should reject if any argument is not provided', function() {
     return expect(getAllOfKind())
-      .to.be.rejected.then(expect(getAllOfKind('testKind')).to.be.rejected)
+      .to.be.rejected.then(expect(getAllOfKind('TestKind')).to.be.rejected)
       .then(expect(getAllOfKind(undefined, 'order')).to.be.rejected)
       .then(expect(getAllOfKind(undefined, undefined, 20)).to.be.rejected)
       .then(expect(getAllOfKind(undefined, undefined, undefined, 2)).to.be.rejected);
@@ -246,7 +246,7 @@ describe('Database Get By Field Test', function() {
   });
 
   it('Return all objects of that fulfill the field value', function() {
-    const kindToTest = 'testKind2';
+    const kindToTest = 'TestKind2';
     const fieldToTest = 'num';
     const needleToTest = 3;
     return getDocumentsByField(kindToTest, 'num', 3)
@@ -264,7 +264,7 @@ describe('Database Get By Field Test', function() {
   });
 
   it('Should return an empty array if no items exists of that kind', function() {
-    const kindToTest = 'testKind2';
+    const kindToTest = 'TestKind2';
     const fieldToTest = 'doesntExist';
     const needleToTest = 3;
     return getDocumentsByField(kindToTest, fieldToTest, needleToTest)
@@ -279,7 +279,7 @@ describe('Database Get By Field Test', function() {
 
   it('Should reject if any argument is not provided', function() {
     return expect(getDocumentsByField())
-      .to.be.rejected.then(expect(getDocumentsByField('testKind')).to.be.rejected)
+      .to.be.rejected.then(expect(getDocumentsByField('TestKind')).to.be.rejected)
       .then(expect(getDocumentsByField(undefined, 'testField')).to.be.rejected)
       .then(expect(getDocumentsByField(undefined, undefined, 2)).to.be.rejected);
   });

@@ -1,6 +1,7 @@
 {
   "userId": "123124134134134",
   "applyDate": "2020-05-20",
+  "approved": true,
   "firstName": "First",
   "lastName": "Last",
   "ssn": "1234567890",

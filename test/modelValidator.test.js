@@ -70,11 +70,11 @@ describe('Model Validator - Status update validation', function() {
   const correct = {status: true, oldStatus: false};
   const incorrect = {status: 'true', oldStatus: -1};
   it('should return true for a correct payload', function() {
-    return expect(validateStatusUpdate(correct)).to.eventually.equal(true);
+    return expect(validateStatusUpdate('123', correct)).to.eventually.equal(true);
   });
 
   it('should return a failure object with all fields failing for the incorrect status update', function() {
-    const errorPromise = validateStatusUpdate(incorrect);
+    const errorPromise = validateStatusUpdate('123', incorrect);
     return Promise.all(verifyErrorObject(errorPromise, incorrect));
   });
 

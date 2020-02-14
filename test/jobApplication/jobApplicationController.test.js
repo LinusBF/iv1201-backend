@@ -21,7 +21,7 @@ for (let i = 0; i < 50; i++) {
     num: i % 5,
     applyDate: nextDate.toISOString().substring(0, 10),
     userId: guid(),
-    kind: i < 25 ? 'testKind' : 'testKind2',
+    kind: i < 25 ? 'TestKind' : 'TestKind2',
   };
 }
 
