@@ -31,8 +31,8 @@ module.exports = router => {
 
   router.get('/application', (req, res) => {
     console.info(`Received request to get all applications`);
-    const count = req.query.count;
-    const offset = req.query.offset;
+    const count = parseInt(req.query.count);
+    const offset = parseInt(req.query.offset);
     if (validateCountAndOffset(count, offset)) {
       getApplications(count, offset)
         .then(applications => {

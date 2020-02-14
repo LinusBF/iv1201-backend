@@ -71,8 +71,8 @@ const validateApplicationModel = applicationPayload => {
  */
 const validateCountAndOffset = (count, offset) => {
   return (
-    (typeof count === 'undefined' || typeof count === 'number') &&
-    (typeof offset === 'undefined' || typeof offset === 'number')
+    (typeof count === 'undefined' || (typeof count === 'number' && !Number.isNaN(count))) &&
+    (typeof offset === 'undefined' || (typeof offset === 'number' && !Number.isNaN(offset)))
   );
 };
 
