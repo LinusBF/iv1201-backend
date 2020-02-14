@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha"
+    "dev": "node -r dotenv/config index.js",
+    "test": "mocha --config .mocharc.yaml",
+    "integration-test": "mocha --config .mocharc-integration.yaml"
   },
   "repository": {
     "type": "git",
@@ -35,13 +37,6 @@
     "sinon": "^8.1.1",
     "sinon-chai": "^3.4.0",
     "uuid": "^3.4.0"
-  },
-  "mocha": {
-    "spec": "test/**/*.test.js",
-    "recursive": true,
-    "exclude": "**/*.local.test.js",
-    "require": "dotenv/config",
-    "timeout": "20000"
   },
   "husky": {
     "hooks": {

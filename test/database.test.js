@@ -8,7 +8,16 @@ const proxyquire = require('proxyquire');
 
 chai.use(chaiAsPromised);
 
-const objectToSaveToDatabase = {test: 'test'};
+let objectToSaveToDatabase = {};
+const expectedSavedObject = {
+  testString: 'test',
+  testInt: 1337,
+  testArray: [1, 'test'],
+  testNestedArray: [
+    [1, 2],
+    ['one', 'two'],
+  ],
+};
 const listOfObjectsInDB = [];
 for (let i = 0; i < 50; i++) {
   listOfObjectsInDB[i] = {test: `test${i}`, num: i % 5, kind: i < 25 ? 'testKind' : 'testKind2'};
@@ -43,6 +52,18 @@ beforeEach(utils.stubConsole);
 afterEach(utils.restoreConsole);
 
 describe('Database Add Entity Test', function() {
+  beforeEach(function() {
+    objectToSaveToDatabase = {
+      testString: 'test',
+      testInt: 1337,
+      testArray: [1, 'test'],
+      testNestedArray: [
+        [1, 2],
+        ['one', 'two'],
+      ],
+    };
+  });
+
   before(function() {
     keyOverRide = function(kindOrKindAndId) {
       if (Array.isArray(kindOrKindAndId)) return kindOrKindAndId[1];
@@ -61,7 +82,7 @@ describe('Database Add Entity Test', function() {
   it('Should save the test object to the database with a generated key if none is provided', function() {
     return putEntityInDB(objectToSaveToDatabase, 'testKind')
       .then(result => {
-        expect(result.data).to.be.eq(objectToSaveToDatabase);
+        expect(JSON.stringify(result.data)).to.be.eql(JSON.stringify(expectedSavedObject));
         expect(result.key).to.be.eq('GeneratedId');
       })
       .catch(err => {
@@ -72,7 +93,7 @@ describe('Database Add Entity Test', function() {
   it('Should save the test object with a specific key if one is provided', function() {
     return putEntityInDB(objectToSaveToDatabase, 'testKind', 'testKey')
       .then(result => {
-        expect(result.data).to.be.eq(objectToSaveToDatabase);
+        expect(JSON.stringify(result.data)).to.be.eql(JSON.stringify(expectedSavedObject));
         expect(result.key).to.be.eq('testKey');
       })
       .catch(err => {

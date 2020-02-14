@@ -1,0 +1,5 @@
+spec: test/**/*.test.js
+recursive: true
+exclude: "**/*+(*.integration|*.local).test.js"
+require: dotenv/config
+timeout: 20000

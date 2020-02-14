@@ -1,0 +1,4 @@
+spec: test/**/*.integration.test.js
+recursive: true
+include: dotenv/config
+timeout: 60000
