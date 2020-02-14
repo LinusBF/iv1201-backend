@@ -11,7 +11,12 @@ chai.use(chaiAsPromised);
 let objectToSaveToDatabase = {};
 const listOfObjectsInDB = [];
 for (let i = 0; i < 50; i++) {
-  listOfObjectsInDB[i] = {test: `test${i}`, num: i % 5, kind: i < 25 ? 'testKind' : 'testKind2'};
+  listOfObjectsInDB[i] = {
+    test: `test${i}`,
+    order: i,
+    num: i % 5,
+    kind: i < 25 ? 'testKind' : 'testKind2',
+  };
 }
 
 let keyOverRide = () => {};
@@ -103,18 +108,30 @@ describe('Database Add Entity Test', function() {
 });
 
 describe('Database List All Test', function() {
-  let queriedKind, queriedOffset, queriedLimit;
+  let queriedKind, queriedSort, queriedOffset, queriedLimit;
+  const sortByTest = 'order';
+
+  const sorter = (a, b) => {
+    if (a[queriedSort] < b[queriedSort]) return 1;
+    if (a[queriedSort] > b[queriedSort]) return -1;
+    return 0;
+  };
 
   before(function() {
     queryOverRide = function(kind) {
       queriedKind = kind;
       return {
-        offset: o => {
-          queriedOffset = o;
+        order: s => {
+          queriedSort = s;
           return {
-            limit: n => {
-              queriedLimit = n;
-              return {queryOfKind: kind};
+            offset: o => {
+              queriedOffset = o;
+              return {
+                limit: n => {
+                  queriedLimit = n;
+                  return {queryOfKind: kind};
+                },
+              };
             },
           };
         },
@@ -126,6 +143,7 @@ describe('Database List All Test', function() {
         res([
           listOfObjectsInDB
             .filter(testObj => testObj.kind === queriedKind)
+            .sort(sorter)
             .slice(queriedOffset)
             .splice(0, queriedLimit)
             .map(obj => {
@@ -145,12 +163,12 @@ describe('Database List All Test', function() {
 
   it('Return all objects of kind in DB', function() {
     const kindToTest = 'testKind2';
-    return getAllOfKind(kindToTest, 20, 0)
+    return getAllOfKind(kindToTest, sortByTest, 20, 0)
       .then(result => {
         expect(Array.isArray(result)).to.be.true;
         expect(result.length).to.be.lessThan(21);
-        expect(result[0]).to.be.eq(listOfObjectsInDB[25]);
-        expect(result[1]).to.be.eq(listOfObjectsInDB[26]);
+        expect(result[0]).to.be.eq(listOfObjectsInDB[49]);
+        expect(result[1]).to.be.eq(listOfObjectsInDB[48]);
         expect(result.every(o => o.kind === kindToTest)).to.be.true;
       })
       .catch(err => {
@@ -160,7 +178,7 @@ describe('Database List All Test', function() {
 
   it('Should return an empty array if no items exists of that kind', function() {
     const kindToTest = 'doesntExist';
-    return getAllOfKind(kindToTest, 20, 0)
+    return getAllOfKind(kindToTest, sortByTest, 20, 0)
       .then(result => {
         expect(Array.isArray(result)).to.be.true;
         expect(result.length).to.be.eql(0);
@@ -170,11 +188,24 @@ describe('Database List All Test', function() {
       });
   });
 
+  it('Should return items in the correct order', function() {
+    const kindToTest = 'testKind2';
+    const expectedFirstElement = listOfObjectsInDB[49];
+    return getAllOfKind(kindToTest, sortByTest, 25, 0)
+      .then(result => {
+        expect(result[0].order).to.be.eql(expectedFirstElement.order);
+      })
+      .catch(err => {
+        expect.fail(err);
+      });
+  });
+
   it('Should reject if any argument is not provided', function() {
     return expect(getAllOfKind())
       .to.be.rejected.then(expect(getAllOfKind('testKind')).to.be.rejected)
-      .then(expect(getAllOfKind(undefined, 20)).to.be.rejected)
-      .then(expect(getAllOfKind(undefined, undefined, 2)).to.be.rejected);
+      .then(expect(getAllOfKind(undefined, 'order')).to.be.rejected)
+      .then(expect(getAllOfKind(undefined, undefined, 20)).to.be.rejected)
+      .then(expect(getAllOfKind(undefined, undefined, undefined, 2)).to.be.rejected);
   });
 });
 

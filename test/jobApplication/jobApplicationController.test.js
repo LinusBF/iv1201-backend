@@ -15,10 +15,11 @@ const listOfObjectsInDB = [];
 const startDate = new Date('2020-01-01');
 for (let i = 0; i < 50; i++) {
   const nextDate = new Date(startDate);
+  nextDate.setDate(nextDate.getDate() + i);
   listOfObjectsInDB[i] = {
     test: `test${i}`,
     num: i % 5,
-    applyDate: nextDate.setDate(nextDate.getDate() + i),
+    applyDate: nextDate.toISOString().substring(0, 10),
     userId: guid(),
     kind: i < 25 ? 'testKind' : 'testKind2',
   };
@@ -129,18 +130,28 @@ describe('Job Application Controller - Get Application by User ID', function() {
 });
 
 describe('Job Application Controller - Get All Applications', function() {
-  let queriedKind, queriedOffset, queriedLimit;
+  let queriedKind, queriedSort, queriedOffset, queriedLimit;
+  const sorter = (a, b) => {
+    if (a[queriedSort] < b[queriedSort]) return 1;
+    if (a[queriedSort] > b[queriedSort]) return -1;
+    return 0;
+  };
 
   before(function() {
     queryOverRide = function(kind) {
       queriedKind = kind;
       return {
-        offset: o => {
-          queriedOffset = o;
+        order: s => {
+          queriedSort = s;
           return {
-            limit: n => {
-              queriedLimit = n;
-              return {queryOfKind: kind};
+            offset: o => {
+              queriedOffset = o;
+              return {
+                limit: n => {
+                  queriedLimit = n;
+                  return {queryOfKind: kind};
+                },
+              };
             },
           };
         },
@@ -152,6 +163,7 @@ describe('Job Application Controller - Get All Applications', function() {
         res([
           listOfObjectsInDB
             .filter(testObj => testObj.kind === queriedKind)
+            .sort(sorter)
             .slice(queriedOffset)
             .splice(0, queriedLimit)
             .map(obj => {
@@ -174,9 +186,11 @@ describe('Job Application Controller - Get All Applications', function() {
   });
 
   it('should return the applications in the right order', function() {
-    const needleApplication = listOfObjectsInDB[9];
-    return expect(getApplications(10, 0)).to.eventually.satisfies(
-      arr => arr[0] === needleApplication
-    );
+    const needleApplication = listOfObjectsInDB[24];
+    return getApplications(10, 0)
+      .then(arr => {
+        return expect(arr[0]).to.be.eq(needleApplication);
+      })
+      .catch(err => expect.fail(err));
   });
 });

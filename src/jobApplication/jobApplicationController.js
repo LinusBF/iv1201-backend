@@ -4,6 +4,7 @@ const {putEntityInDB, getAllOfKind, getDocumentsByField} = require('../database'
 
 const APPLICATION_KIND =
   process.env[`JOB_APPLICATION_KIND${process.env.NODE_ENV === 'production' ? '' : '_DEV'}`];
+const SORT_FIELD = process.env.SORT_FIELD_NAME;
 const USER_ID_FIELD = process.env.USER_FIELD_NAME;
 
 /**
@@ -22,9 +23,7 @@ const submitApplication = (application, overrideId) => {
  * @return {Promise<never> | Promise<[Application]>}
  */
 const getApplications = (count, offset) => {
-  return getAllOfKind(APPLICATION_KIND, count ? count : 20, offset ? offset : 0).then(docs =>
-    docs.sort((a, b) => a.applyDate < b.applyDate)
-  );
+  return getAllOfKind(APPLICATION_KIND, SORT_FIELD, count ? count : 20, offset ? offset : 0);
 };
 
 /**

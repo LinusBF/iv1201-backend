@@ -33,15 +33,17 @@ const putEntityInDB = (thingToSave, kindOfThing, idOfThing) => {
 
 /**
  * @param kindOfThing String
+ * @param sortBy String
  * @param count Number
  * @param offset Number
  * @return {Promise<never>|Promise<Entity[]>}
  */
-const getAllOfKind = (kindOfThing, count, offset) => {
-  if (![kindOfThing, count, offset].every(arg => typeof arg !== 'undefined'))
+const getAllOfKind = (kindOfThing, sortBy, count, offset) => {
+  if (![kindOfThing, sortBy, count, offset].every(arg => typeof arg !== 'undefined'))
     return Promise.reject(new Error(`Some arguments are undefined!`));
   const query = datastore
     .createQuery(kindOfThing)
+    .order(sortBy, {descending: true})
     .offset(offset ? offset : 0)
     .limit(count);
   return datastore.runQuery(query).then(([allOfKind]) => allOfKind.map(extractObject));
