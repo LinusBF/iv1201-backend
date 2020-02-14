@@ -47,6 +47,10 @@ const applicationSchema = new Schema({
   },
 });
 
+/**
+ * @param applicationPayload Application
+ * @return {Promise<true>|Promise<Schema.ValidationError>}
+ */
 const validateApplicationModel = applicationPayload => {
   return new Promise((resolve, reject) => {
     if (typeof applicationPayload === 'undefined') reject(new Error('data is undefined!'));
@@ -60,6 +64,10 @@ const validateApplicationModel = applicationPayload => {
   });
 };
 
+/**
+ * @param userId String
+ * @return {boolean}
+ */
 const validateUserId = userId => {
   return typeof userId === 'string' && userId.length > 0;
 };
