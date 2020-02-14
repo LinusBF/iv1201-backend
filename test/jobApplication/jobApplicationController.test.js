@@ -62,7 +62,13 @@ describe('Job Application Controller - Submit application', function() {
       else return `GeneratedId`;
     };
     saveOverRide = function() {
-      return new Promise(res => res([{path: ['Kind', 'GeneratedId']}]));
+      return new Promise(res =>
+        res([
+          {
+            mutationResults: [{key: `GeneratedId`}],
+          },
+        ])
+      );
     };
   });
 
@@ -96,7 +102,12 @@ describe('Job Application Controller - Get Application by User ID', function() {
         res([
           listOfObjectsInDB
             .filter(testObj => testObj.kind === queriedKind)
-            .filter(testObj => testObj[queriedField] === queriedNeedle),
+            .filter(testObj => testObj[queriedField] === queriedNeedle)
+            .map(obj => {
+              const sym = Symbol('KEY');
+              obj[sym] = {id: 'GeneratedKey'};
+              return obj;
+            }),
         ])
       );
     };
