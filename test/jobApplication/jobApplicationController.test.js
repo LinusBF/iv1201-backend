@@ -17,7 +17,7 @@ for (let i = 0; i < 50; i++) {
     test: `test${i}`,
     num: i % 5,
     userId: guid(),
-    kind: i < 25 ? process.env.JOB_APPLICATION_KIND : 'testKind2',
+    kind: i < 25 ? 'testKind' : 'testKind2',
   };
 }
 

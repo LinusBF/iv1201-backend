@@ -2,7 +2,8 @@
 
 const {putEntityInDB, getDocumentsByField} = require('../database');
 
-const APPLICATION_KIND = process.env.JOB_APPLICATION_KIND;
+const APPLICATION_KIND =
+  process.env[`JOB_APPLICATION_KIND${process.env.NODE_ENV === 'production' ? '' : '_DEV'}`];
 const USER_ID_FIELD = process.env.USER_FIELD_NAME;
 
 /**
