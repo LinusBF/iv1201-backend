@@ -65,6 +65,18 @@ const validateApplicationModel = applicationPayload => {
 };
 
 /**
+ * @param count {Number|undefined}
+ * @param offset {Number|undefined}
+ * @return {boolean}
+ */
+const validateCountAndOffset = (count, offset) => {
+  return (
+    (typeof count === 'undefined' || typeof count === 'number') &&
+    (typeof offset === 'undefined' || typeof offset === 'number')
+  );
+};
+
+/**
  * @param userId String
  * @return {boolean}
  */
@@ -74,5 +86,6 @@ const validateUserId = userId => {
 
 module.exports = {
   validateApplicationModel,
+  validateCountAndOffset,
   validateUserId,
 };

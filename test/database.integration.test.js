@@ -11,7 +11,7 @@ afterEach(utils.restoreConsole);
 
 const integrationKind = 'TestKind';
 
-describe.only('Database Add Entity Integration Test', function() {
+describe('Database Add Entity Integration Test', function() {
   it('should correctly save an entity to the database', function() {
     const objectToSave = {
       testString: 'test',
@@ -32,14 +32,28 @@ describe.only('Database Add Entity Integration Test', function() {
 });
 
 describe('Database Fetch Entity Integration Test', function() {
-  it('should correctly save an entity to the database', function() {
+  it('should correctly fetch an entity from the database', function() {
     return database
       .getDocumentsByField(integrationKind, 'testInt', 1337)
       .then(fetchedValue => {
         return expect(fetchedValue).to.not.be.undefined;
       })
       .catch(err => {
-        return expect.fail(`Failed to create with error: ${err}`);
+        return expect.fail(`Failed to fetch with error: ${err}`);
+      });
+  });
+});
+
+describe.only('Database Fetch Entity Integration Test', function() {
+  it('should correctly fetch all entity of type from the database', function() {
+    return database
+      .getAllOfKind(integrationKind, 5, 0)
+      .then(fetchedValue => {
+        console.debug(JSON.stringify(fetchedValue, null, 2));
+        return expect(fetchedValue.length).to.be.eql(5);
+      })
+      .catch(err => {
+        return expect.fail(`Failed to fetch with error: ${err}`);
       });
   });
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-const {putEntityInDB, getDocumentsByField} = require('../database');
+const {putEntityInDB, getAllOfKind, getDocumentsByField} = require('../database');
 
 const APPLICATION_KIND =
   process.env[`JOB_APPLICATION_KIND${process.env.NODE_ENV === 'production' ? '' : '_DEV'}`];
@@ -17,6 +17,17 @@ const submitApplication = (application, overrideId) => {
 };
 
 /**
+ * @param count {Number|undefined}
+ * @param offset {Number|undefined}
+ * @return {Promise<never> | Promise<[Application]>}
+ */
+const getApplications = (count, offset) => {
+  return getAllOfKind(APPLICATION_KIND, count ? count : 20, offset ? offset : 0).then(docs =>
+    docs.sort((a, b) => a.applyDate < b.applyDate)
+  );
+};
+
+/**
  * @param userId String
  * @return {Promise<never> | Promise<Application>}
  */
@@ -28,5 +39,6 @@ const getApplicationByUser = userId => {
 
 module.exports = {
   submitApplication,
+  getApplications,
   getApplicationByUser,
 };

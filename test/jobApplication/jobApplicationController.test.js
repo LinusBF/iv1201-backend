@@ -12,10 +12,13 @@ chai.use(chaiAsPromised);
 
 const objectToSaveToDatabase = {test: 'test'};
 const listOfObjectsInDB = [];
+const startDate = new Date('2020-01-01');
 for (let i = 0; i < 50; i++) {
+  const nextDate = new Date(startDate);
   listOfObjectsInDB[i] = {
     test: `test${i}`,
     num: i % 5,
+    applyDate: nextDate.setDate(nextDate.getDate() + i),
     userId: guid(),
     kind: i < 25 ? 'testKind' : 'testKind2',
   };
@@ -42,13 +45,13 @@ class Storage {
   }
 }
 
-const {putEntityInDB, getDocumentsByField} = proxyquire('../../src/database.js', {
+const {putEntityInDB, getDocumentsByField, getAllOfKind} = proxyquire('../../src/database.js', {
   '@google-cloud/datastore': {Datastore: Storage},
 });
-const {submitApplication, getApplicationByUser} = proxyquire(
+const {submitApplication, getApplicationByUser, getApplications} = proxyquire(
   '../../src/jobApplication/jobApplicationController.js',
   {
-    '../database.js': {putEntityInDB, getDocumentsByField},
+    '../database.js': {putEntityInDB, getDocumentsByField, getAllOfKind},
   }
 );
 
@@ -122,5 +125,58 @@ describe('Job Application Controller - Get Application by User ID', function() {
     const needleApplication = listOfObjectsInDB[15];
     const userIdToSearchFor = needleApplication.userId;
     return expect(getApplicationByUser(userIdToSearchFor)).to.eventually.be.eql(needleApplication);
+  });
+});
+
+describe('Job Application Controller - Get All Applications', function() {
+  let queriedKind, queriedOffset, queriedLimit;
+
+  before(function() {
+    queryOverRide = function(kind) {
+      queriedKind = kind;
+      return {
+        offset: o => {
+          queriedOffset = o;
+          return {
+            limit: n => {
+              queriedLimit = n;
+              return {queryOfKind: kind};
+            },
+          };
+        },
+      };
+    };
+    resultOverRide = function(query) {
+      expect(queriedKind).to.be.eql(query.queryOfKind);
+      return new Promise(res =>
+        res([
+          listOfObjectsInDB
+            .filter(testObj => testObj.kind === queriedKind)
+            .slice(queriedOffset)
+            .splice(0, queriedLimit)
+            .map(obj => {
+              const sym = Symbol('KEY');
+              obj[sym] = {id: 'GeneratedKey'};
+              return obj;
+            }),
+        ])
+      );
+    };
+  });
+
+  after(function() {
+    queryOverRide = () => {};
+    resultOverRide = () => {};
+  });
+
+  it('should return the correct amount of applications', function() {
+    return expect(getApplications(10, 0)).to.eventually.have.length(10);
+  });
+
+  it('should return the applications in the right order', function() {
+    const needleApplication = listOfObjectsInDB[9];
+    return expect(getApplications(10, 0)).to.eventually.satisfies(
+      arr => arr[0] === needleApplication
+    );
   });
 });
