@@ -50,7 +50,7 @@ const {putEntityInDB, getDocumentsByField, getAllOfKind} = proxyquire('../../src
   '@google-cloud/datastore': {Datastore: Storage},
 });
 const {submitApplication, getApplicationByUser, getApplications} = proxyquire(
-  '../../src/jobApplication/jobApplicationController.js',
+  '../../src/application/applicationController.js',
   {
     '../database.js': {putEntityInDB, getDocumentsByField, getAllOfKind},
   }
