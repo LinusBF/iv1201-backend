@@ -1,6 +1,6 @@
 'use strict';
 
-const {getApplicationByUser} = require('../jobApplication/jobApplicationController');
+const {getApplicationByUser} = require('../application/applicationController');
 const {validateUserId} = require('../modelValidator');
 
 /**

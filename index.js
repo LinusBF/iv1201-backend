@@ -2,7 +2,7 @@
 
 const express = require('express');
 const app = express();
-const attachJobApplicationEndpoints = require('./src/jobApplication/moduleRouter');
+const attachJobApplicationEndpoints = require('./src/application/moduleRouter');
 const attachUserEndpoints = require('./src/user/moduleRouter');
 
 app.use(express.json());

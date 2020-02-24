@@ -11,7 +11,7 @@ const {
   getApplications,
   getApplicationById,
   updateStatusOfApplication,
-} = require('./jobApplicationController');
+} = require('./applicationController');
 
 const errResponse = (err, res) => {
   console.error(err);
