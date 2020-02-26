@@ -11,7 +11,12 @@ const applicationSchema = new Schema({
   lastName: {type: String, required: true},
   ssn: {type: String, required: true, length: {min: 10, max: 12}},
   email: {type: String, required: true},
-  expertise: {type: Array, each: {type: String}},
+  expertise: [
+    {
+      name: {type: String},
+      yearsExp: {type: Number},
+    },
+  ],
   available: [
     {
       from: {type: String, match: dateRegex, message: dateErrMsg},
