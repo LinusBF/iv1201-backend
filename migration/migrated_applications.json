@@ -1,0 +1,72 @@
+[
+  {
+    "expertise": [
+      {
+        "name": "Korvgrillning",
+        "yearsExp": 3.5
+      },
+      {
+        "name": "Karuselldrift",
+        "yearsExp": 2
+      }
+    ],
+    "available": [
+      {
+        "from": "2014-07-10",
+        "to": "2014-08-10"
+      },
+      {
+        "from": "2014-02-23",
+        "to": "2014-05-25"
+      }
+    ],
+    "userId": "8NXP6EkqUHW0NTwga3YzfmV32T52",
+    "firstName": "Per",
+    "lastName": "Strand",
+    "ssn": "196712121211",
+    "email": "per@strand.kth.se",
+    "username": "NULL",
+    "applyDate": "2020-02-26",
+    "approved": false,
+    "letter": "Part of migration from old DB"
+  },
+  {
+    "expertise": [
+      {
+        "name": "Karuselldrift",
+        "yearsExp": 2.5
+      },
+      {
+        "name": "Korvgrillning",
+        "yearsExp": 1
+      }
+    ],
+    "available": [
+      {
+        "from": "2016-03-23",
+        "to": "2016-06-25"
+      },
+      {
+        "from": "2016-01-23",
+        "to": "2016-02-25"
+      },
+      {
+        "from": "2015-10-23",
+        "to": "2015-12-25"
+      },
+      {
+        "from": "2015-07-23",
+        "to": "2015-09-25"
+      }
+    ],
+    "userId": "jec75ZN3DZYccvhhDHYARtV7oN52",
+    "firstName": "Pelle",
+    "lastName": "Svensson",
+    "ssn": "198712121245",
+    "email": "pelle@svensson.kth.se",
+    "username": "NULL",
+    "applyDate": "2020-02-26",
+    "approved": false,
+    "letter": "Part of migration from old DB"
+  }
+]

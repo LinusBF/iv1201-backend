@@ -6,7 +6,10 @@
   "lastName": "Last",
   "ssn": "1234567890",
   "email": "test@test.com",
-  "expertise": ["Expertise1", "Expertise2", "Expertise3"],
+  "expertise": [
+    {"name": "Experience1", "yearsExp": 4.5},
+    {"name": "Experience2", "yearsExp": 2}
+  ],
   "available": [
     {"from": "2020-01-01", "to": "2020-02-01"},
     {"from": "2020-03-01", "to": "2020-04-01"}

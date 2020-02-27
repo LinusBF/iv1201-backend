@@ -6,16 +6,21 @@ const dateErrMsg = 'Must be a valid date!';
 const applicationSchema = new Schema({
   userId: {type: String, required: true},
   applyDate: {type: String, required: true, match: dateRegex, message: dateErrMsg},
-  approved: {type: Boolean, required: true},
+  approved: {type: Boolean},
   firstName: {type: String, required: true},
   lastName: {type: String, required: true},
   ssn: {type: String, required: true, length: {min: 10, max: 12}},
   email: {type: String, required: true},
-  expertise: {type: Array, each: {type: String}},
+  expertise: [
+    {
+      name: {type: String, required: true},
+      yearsExp: {type: Number, required: true},
+    },
+  ],
   available: [
     {
-      from: {type: String, match: dateRegex, message: dateErrMsg},
-      to: {type: String, match: dateRegex, message: dateErrMsg},
+      from: {type: String, required: true, match: dateRegex, message: dateErrMsg},
+      to: {type: String, required: true, match: dateRegex, message: dateErrMsg},
     },
   ],
   letter: {type: String, required: true},
@@ -39,6 +44,7 @@ const validateSchema = (schemaToTestAgainst, thingToTest) => {
     else {
       const error = new Error('Bad format!');
       error.pathErrors = errors.map(err => ({path: err.path, error: err.message}));
+      console.error(error.pathErrors);
       reject(error);
     }
   });

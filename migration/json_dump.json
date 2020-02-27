@@ -1,0 +1,70 @@
+[
+  {
+    "expertise": [
+      {
+        "name": "Korvgrillning",
+        "yearsExp": "3.50"
+      },
+      {
+        "name": "Karuselldrift",
+        "yearsExp": "2.00"
+      }
+    ],
+    "available": [
+      {
+        "from": "2014-07-10",
+        "to": "2014-08-10"
+      },
+      {
+        "from": "2014-02-23",
+        "to": "2014-05-25"
+      }
+    ],
+    "userId": "2",
+    "firstName": "Per",
+    "lastName": "Strand",
+    "ssn": "19671212-1211",
+    "email": "per@strand.kth.se",
+    "password": "NULL",
+    "username": "NULL",
+    "role_name": "applicant"
+  },
+  {
+    "expertise": [
+      {
+        "name": "Karuselldrift",
+        "yearsExp": "2.50"
+      },
+      {
+        "name": "Korvgrillning",
+        "yearsExp": "1.00"
+      }
+    ],
+    "available": [
+      {
+        "from": "2016-03-23",
+        "to": "2016-06-25"
+      },
+      {
+        "from": "2016-01-23",
+        "to": "2016-02-25"
+      },
+      {
+        "from": "2015-10-23",
+        "to": "2015-12-25"
+      },
+      {
+        "from": "2015-07-23",
+        "to": "2015-09-25"
+      }
+    ],
+    "userId": "3",
+    "firstName": "Pelle",
+    "lastName": "Svensson",
+    "ssn": "19871212-1245",
+    "email": "pelle@svensson.kth.se",
+    "password": "NULL",
+    "username": "NULL",
+    "role_name": "applicant"
+  }
+]
