@@ -32,10 +32,10 @@ module.exports = router => {
     if (validateUserId(req.params.userId)) {
       getUserStatus(req.params.userId)
         .then(user => {
-          if (user === false) {
-            res.status(200).send('applicant');
-          } else {
+          if (user && user.length > 0) {
             res.status(200).send('admin');
+          } else {
+            res.status(200).send('applicant');
           }
         })
         .catch(err => {
