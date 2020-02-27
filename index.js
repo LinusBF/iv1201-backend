@@ -22,7 +22,7 @@ attachJobApplicationEndpoints(router);
 attachUserEndpoints(router);
 app.use('/', router);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log('Hello world listening on port', port);
+  console.log('Backend service listening on port', port);
 });
