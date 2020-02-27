@@ -7,8 +7,8 @@
   "ssn": "1234567890",
   "email": "test@test.com",
   "expertise": [
-    {"name": "Experience1", "yearExp": 4.5},
-    {"name": "Experience2", "yearExp": 2}
+    {"name": "Experience1", "yearsExp": 4.5},
+    {"name": "Experience2", "yearsExp": 2}
   ],
   "available": [
     {"from": "2020-01-01", "to": "2020-02-01"},

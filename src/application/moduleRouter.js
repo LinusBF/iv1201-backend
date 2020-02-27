@@ -30,8 +30,7 @@ module.exports = router => {
     validateApplicationModel(applicationToAdd)
       .then(() => {
         return submitApplication(applicationToAdd, overrideId)
-          .then(result => {
-            console.debug(result);
+          .then(() => {
             res.status(200).send('Application successfully submitted');
           })
           .catch(err => errResponse(err, res));
