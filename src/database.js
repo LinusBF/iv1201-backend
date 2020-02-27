@@ -7,7 +7,7 @@ const datastore = new Datastore();
 
 const extractObject = obj => {
   const symbolKey = Reflect.ownKeys(obj).find(key => key.toString() === 'Symbol(KEY)');
-  obj.uid = obj[symbolKey].id;
+  obj.uId = obj[symbolKey].id;
   return obj;
 };
 

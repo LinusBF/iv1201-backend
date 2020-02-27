@@ -11,10 +11,11 @@ const {getUserStatus} = require('./userController');
 module.exports = router => {
   router.get('/user/:userId/application', (req, res) => {
     console.info(`Received request to get application by user`);
+    console.info(req.params.userId);
     if (validateUserId(req.params.userId)) {
       getApplicationByUser(req.params.userId)
         .then(application => {
-          if (application === false) {
+          if (typeof application === 'undefined' || application === false) {
             res.status(404).send('Could not find job application from that user!');
           } else {
             res.status(200).send({application});
@@ -24,6 +25,8 @@ module.exports = router => {
           console.error(err);
           res.status(500).send('Something failed! Check the logs!');
         });
+    } else {
+      res.status(400).send('Bad Format!');
     }
   });
 

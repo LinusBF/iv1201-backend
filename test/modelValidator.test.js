@@ -67,8 +67,8 @@ describe('Model Validator - Application model validation', function() {
 });
 
 describe('Model Validator - Status update validation', function() {
-  const correct = {status: true, oldStatus: false};
-  const incorrect = {status: 'true', oldStatus: -1};
+  const correct = {status: 'approved', oldStatus: 'rejected'};
+  const incorrect = {status: 'true', oldStatus: false};
   it('should return true for a correct payload', function() {
     return expect(validateStatusUpdate('123', correct)).to.eventually.equal(true);
   });

@@ -2,11 +2,13 @@
 const Schema = require('validate');
 const dateRegex = /(19|20)[0-9][0-9]-([0][0-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])/;
 const dateErrMsg = 'Must be a valid date!';
+const statusRegex = /approved|rejected|pending/;
+const statusErrMsg = "Must be one of 'approved', 'rejected', 'pending'!";
 
 const applicationSchema = new Schema({
   userId: {type: String, required: true},
   applyDate: {type: String, required: true, match: dateRegex, message: dateErrMsg},
-  approved: {type: Boolean},
+  approved: {type: String, required: true, match: statusRegex, message: statusErrMsg},
   firstName: {type: String, required: true},
   lastName: {type: String, required: true},
   ssn: {type: String, required: true, length: {min: 10, max: 12}},
@@ -27,8 +29,8 @@ const applicationSchema = new Schema({
 });
 
 const statusUpdateSchema = new Schema({
-  status: {type: Boolean, required: true},
-  oldStatus: {type: Boolean, required: true},
+  status: {type: String, required: true, match: statusRegex, message: statusErrMsg},
+  oldStatus: {type: String, required: true, match: statusRegex, message: statusErrMsg},
 });
 
 /**
