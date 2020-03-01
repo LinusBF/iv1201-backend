@@ -30,7 +30,7 @@ module.exports = router => {
     }
   });
 
-  router.post('/user/:userId/user-status', (req, res) => {
+  router.get('/user/:userId/user-status', (req, res) => {
     console.info(`Received request to get status of user`);
     if (validateUserId(req.params.userId)) {
       getUserStatus(req.params.userId)
