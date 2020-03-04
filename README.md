@@ -118,6 +118,7 @@ The application was successfully put in the database
 ```json
 {
   "application": {
+    "applyDate": "",
     
   }
 }
