@@ -216,12 +216,28 @@ The application was successfully put in the database
 The submitted request body did not match the expected schema.
 ```json
 {
-  
+  git push
 }
 ```
 ##### 500
 Something else went wrong.
 ```
 Something failed! Check the logs!
+```
+## Folder structure
+```.
+├── migration                # Script for migrating from old DB
+├── src                      # Source folder for backend
+│   ├── application            # Endpoints rel. to applications
+│   ├── user                   # Endpoints rel. to users
+│   ├── database.js            # Database integration
+│   └── modelValidator.js      # Object validation model (O/R Mapping)
+├── test                     # Test folder
+├── cloudbuild.yaml          # Config for Google Cloud Build
+├── Dockerfile               # Docker-config for deployment
+├── package.json             # Node JS dependancies
+├── index.js                 # Express JS router
+├── README.md               
+└── webpack.config.js        # Webpack resource bundler config 
 ```
 
