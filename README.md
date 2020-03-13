@@ -55,16 +55,33 @@ Adds a new job application to the database
 #### Expected Format
 ```json
 {
-  
+  "userId": "{type: String, required: true}",
+  "applyDate": "{type: String, required: true, match: /(19|20)[0-9][0-9]-([0][0-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])/}",
+  "approved": "{type: String, required: true, match: /approved|rejected|pending/}",
+  "firstName": "{type: String, required: true}",
+  "lastName": "{type: String, required: true}",
+  "ssn": "{type: String, required: true, length: {min: 10, max: 12}}",
+  "email": "{type: String, required: true}",
+  "expertise": [
+    {
+      "name": "{type: String, required: true}",
+      "yearsExp": "{type: Number, required: true}",
+    },
+  ],
+  "available": [
+    {
+      "from": "{type: String, required: true, match: /(19|20)[0-9][0-9]-([0][0-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])/}",
+      "to": "{type: String, required: true, match: /(19|20)[0-9][0-9]-([0][0-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])/}",
+    },
+  ],
+  "letter": "{type: String, required: true}",
 }
 ```
 #### Responses
 The application was successfully put in the database
 ##### 200
 ```json
-{
-  
-}
+'Application successfully submitted'
 ```
 ##### 400
 The submitted request body did not match the expected schema.
