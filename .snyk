@@ -9,4 +9,26 @@ ignore:
     - '@google-cloud/nodejs-repo-tools > ava > update-notifier > configstore > dot-prop':
         reason: no upgrade path
         expires: '2020-03-13T17:26:11.407Z'
+  SNYK-JS-MINIMIST-559764:
+    - minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.924Z'
+    - node-pre-gyp > rc > minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.924Z'
+    - mkdirp > minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.924Z'
+    - node-pre-gyp > mkdirp > minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.924Z'
+    - node-pre-gyp > tar > mkdirp > minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.924Z'
+    - snyk > @snyk/update-notifier > latest-version > package-json > registry-auth-token > rc > minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.924Z'
+    - snyk > @snyk/update-notifier > latest-version > package-json > registry-url > rc > minimist:
+        reason: None given
+        expires: '2020-04-12T09:16:26.925Z'
 patch: {}
