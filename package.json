@@ -41,7 +41,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && snyk test --dev && yarn test",
+      "pre-commit": "lint-staged && snyk test && yarn test",
       "post-merge": "yarn install"
     }
   },
