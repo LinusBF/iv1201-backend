@@ -15,6 +15,7 @@ steps:
       - USER_FIELD_NAME=userId
       - SORT_FIELD_NAME=applyDate
       - STATUS_FIELD_NAME=approved
+      - USER_STATUS_KIND=Admin
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Upload docker image to gcr.io"
